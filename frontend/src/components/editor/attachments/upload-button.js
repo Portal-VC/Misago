@@ -12,15 +12,15 @@ export default class extends React.Component {
     }
 
     return (
-      <button
-        className={"btn btn-icon " + this.props.className}
+      <li
+        className={this.props.className}
         disabled={this.props.disabled}
         onClick={this.onClick}
         title={gettext("Upload file")}
         type="button"
       >
-        <span className="material-icon">file_upload</span>
-      </button>
+        <span className="material-icon">file_upload</span> Upload file
+      </li>
     )
   }
 }

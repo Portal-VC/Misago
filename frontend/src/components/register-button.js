@@ -62,7 +62,7 @@ export default class extends React.Component {
         onClick={this.showRegisterForm}
         type="button"
       >
-        {gettext("Register")}
+        {gettext("Make Account")}
         {this.state.isLoading ? <Loader /> : null}
       </button>
     )
