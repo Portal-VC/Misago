@@ -73,8 +73,8 @@ export default class extends Form {
     })
   }
 
-  onPostChange = event => {
-    this.changeValue("post", event.target.value)
+  onPostChange = value => {
+    this.changeValue("post", value)
   }
 
   onAttachmentsChange = attachments => {
