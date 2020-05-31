@@ -6,14 +6,11 @@ const mardkedRenderer = (content) => {
         renderer: new marked.Renderer(),
         gfm: true,
         tables: false,
-        breaks: false,
+        breaks: true,
         pedantic: false,
         sanitize: false,
-        smartLists: true,
-        smartypants: false,
-        // highlight: (code) => {
-        //     return hljs.highlightAuto(code).value
-        // }
+        smartLists: false,
+        smartypants: false
     })
 
     const renderer = new marked.Renderer()
@@ -22,42 +19,6 @@ const mardkedRenderer = (content) => {
         return `<h${level}>
     <span class="k-heading">${text}</span>
   </h${level}>`
-    }
-    const paragraphParse = (text) => {
-        const markTag = new RegExp(
-            '(\\=\\=+)([^\\=\\=]|[^\\=\\=][\\s\\S]*?[^\\=\\=])\\1(?!\\=\\=)',
-            'g'
-        )
-
-        if (markTag.test(text)) {
-            let back = ''
-            let textHandle = text
-                .replace('\n', ' ')
-                .replace(markTag, '\n')
-                .split('\n')
-            let markTags = text.match(markTag)
-            if (textHandle[0].length === 0) {
-                markTags.forEach((item, index) => {
-                    textHandle = textHandle.filter((el) => !(el.length === 0))
-                    textHandle.splice(2 * index, 0, item)
-                })
-            } else if (textHandle[0].length !== 0) {
-                markTags.forEach((item, index) => {
-                    textHandle = textHandle.filter((el) => !(el.length === 0))
-                    textHandle.splice(2 * index + 1, 0, item)
-                })
-            }
-            textHandle.forEach((item) => {
-                if (markTag.test(item)) {
-                    back += `<mark>${item.substr(2, item.length - 4)}</mark>`
-                } else {
-                    back += item + ' '
-                }
-            })
-            return `<p>${back}</p>`
-        } else {
-            return `<p>${text}</p>`
-        }
     }
 
     const linkParse = (href, title, text) => {
@@ -86,7 +47,6 @@ const mardkedRenderer = (content) => {
       }>${text}</a>`
     }
 
-    renderer.paragraph = paragraphParse
     renderer.link = linkParse
     renderer.heading = headingParse
 

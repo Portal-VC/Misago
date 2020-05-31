@@ -1,8 +1,5 @@
 import React from "react"
-import Spoiler from "./actions/spoiler"
-import Quote from "./actions/quote"
 import AttachmentsEditor from "./attachments"
-import Upload from "./attachments/upload-button"
 import * as textUtils from "./textutils"
 import Button from "misago/components/button"
 import misago from "misago"
@@ -10,6 +7,7 @@ import classNames from "classnames"
 import marked from "misago/services/marked"
 import Toolbar from "./components/toolbar"
 import { insertText } from "./utils/helper/text"
+import keydownListen from "./utils/helper/keyboard"
 
 export default class extends React.Component {
   static defaultProps = {
@@ -69,6 +67,12 @@ export default class extends React.Component {
       }, 500)
     }
   }
+
+  onKeyDown = (e) => {
+    keydownListen(e, (type) => {
+        this.leftToolBarClick(type)
+    })
+}
 
   replaceSelection = operation => {
     operation(textUtils.getSelectionText(), this._replaceSelection)
@@ -189,9 +193,9 @@ export default class extends React.Component {
         str: "Header 6"
       },
       quote: {
-        prefix: '> ',
-        subfix: '',
-        str: "Quote"
+        prefix: '[quote= @',
+        subfix: ']\n[/quote]',
+        str: "username"
       },
       italic: {
         prefix: '_',
@@ -275,8 +279,9 @@ export default class extends React.Component {
         str: ''
       },
       spoiler: {
-        prefix: "\n\n[spoiler]\n",
-        subfix: "\n[/spoiler]\n\n"
+        prefix: "[spoiler]\n",
+        subfix: "\n[/spoiler]",
+        str: ""
       }
     }
 
@@ -406,7 +411,7 @@ export default class extends React.Component {
                   disabled={loading}
                   id="editor-textarea"
                   onChange={e => this.handleChange(e)}
-                  // onKeyDown={this.onKeyDown}
+                  onKeyDown={this.onKeyDown}
                   placeholder={"Write Some"}
                 />
               </div>
@@ -416,7 +421,7 @@ export default class extends React.Component {
             <div
               id="k-preview"
               className="k-preview k-markdown-preview"
-              dangerouslySetInnerHTML={{ __html: marked(value) }}
+              dangerouslySetInnerHTML={{ __html: marked(value)}}
             />
           </div>
         </div>

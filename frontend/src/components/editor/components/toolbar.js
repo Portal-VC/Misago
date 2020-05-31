@@ -189,12 +189,6 @@ export default class extends React.Component {
                                 <li onClick={() => this.onClickLeft('underline')} title="underline">
                                     underline
                                 </li>
-                                <li onClick={() => this.onClickLeft('superscript')} title="superscript">
-                                    superscript
-                                </li>
-                                <li onClick={() => this.onClickLeft('subscript')} title="substrit">
-                                    subscript
-                                </li>
                             </ul>
                         </li>
                         <li
@@ -210,6 +204,18 @@ export default class extends React.Component {
                                     disable={this.props.loading}
                                 />
                             </ul>
+                        </li>
+                        <li onClick={() => this.onClickLeft('quote')} title="quote">
+                            <span className="material-icon">format_quote</span>
+                        </li>
+                        <li onClick={() => this.onClickLeft('link')} title="link">
+                            <span className="material-icon">link</span>
+                        </li>
+                        <li onClick={() => this.onClickLeft('code')} title="code">
+                            <span className="material-icon">code</span>
+                        </li>
+                        <li onClick={() => this.onClickLeft('spoiler')} title="spoiler">
+                            <span className="material-icon">priority_high</span>
                         </li>
                     </ul>
                 </div>
@@ -272,12 +278,6 @@ export default class extends React.Component {
                                 <li onClick={() => this.onClickLeft('underline')} title="underline">
                                     underline
                                 </li>
-                                <li onClick={() => this.onClickLeft('superscript')} title="superscript">
-                                    superscript
-                                </li>
-                                <li onClick={() => this.onClickLeft('subscript')} title="substrit">
-                                    subscript
-                                </li>
                             </ul>
                         </li>
                         <li
@@ -293,6 +293,18 @@ export default class extends React.Component {
                                     disable={this.props.loading}
                                 />
                             </ul>
+                        </li>
+                        <li onClick={() => this.onClickLeft('quote')} title="quote">
+                            <span className="material-icon">format_quote</span>
+                        </li>
+                        <li onClick={() => this.onClickLeft('link')} title="link">
+                            <span className="material-icon">link</span>
+                        </li>
+                        <li onClick={() => this.onClickLeft('code')} title="code">
+                            <span className="material-icon">code</span>
+                        </li>
+                        <li onClick={() => this.onClickLeft('spoiler')} title="spoiler">
+                            <span className="material-icon">priority_high</span>
                         </li>
                     </ul>
                 </div>
