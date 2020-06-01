@@ -11,7 +11,7 @@ import keydownListen from "./utils/helper/keyboard"
 
 export default class extends React.Component {
   static defaultProps = {
-    fontSize: '14px'
+    fontSize: '18px'
   }
   constructor(props) {
     super(props)
@@ -23,15 +23,17 @@ export default class extends React.Component {
       subfield: false,
       history: [],
       historyIndex: 0,
-      mobile: false
+      mobile: false,
+      allowPrompt: true,
+      areYouReallySure: false
     }
   }
 
   componentDidMount() {
     this.textarea = document.getElementById("editor-textarea")
-    this.scrollEdit = document.getElementById("scrollEdit")
     this.blockEdit = document.getElementById("blockEdit")
     this.reHeight()
+    this.focusText()
     $("#editor-textarea").atwho({
       at: "@",
       displayTpl: '<li><img src="${avatar}" alt="">${username}</li>',
@@ -52,10 +54,16 @@ export default class extends React.Component {
     window.addEventListener('resize', () => {
       this.resize()
     })
+    $(window).on('beforeunload', (e) => this._areYouSure(e));
+
+    $(document).on("submit", "form", function (event) {
+      console.log(event)
+      $(window).off('beforeunload');
+    })
   }
 
   componentDidUpdate(preProps) {
-    const { historyIndex, history} = this.state
+    const { historyIndex, history } = this.state
     const { value } = this.props
     if (value !== preProps.value) {
       this.reHeight()
@@ -63,16 +71,27 @@ export default class extends React.Component {
     if (value !== history[historyIndex]) {
       window.clearTimeout(this.currentTimeout)
       this.currentTimeout = window.setTimeout(() => {
-          this.saveHistory(value)
+        this.saveHistory(value)
       }, 500)
+    }
+  }
+
+  _areYouSure = (e) => {
+    const { areYouReallySure, historyIndex } = this.state
+    console.log(e)
+    if (historyIndex != 0) {
+      if (!areYouReallySure) {
+        this.setState({ areYouReallySure: true })
+        return "Are you sure you want leave ? The changes will not be saved.";
+      }
     }
   }
 
   onKeyDown = (e) => {
     keydownListen(e, (type) => {
-        this.leftToolBarClick(type)
+      this.leftToolBarClick(type)
     })
-}
+  }
 
   replaceSelection = operation => {
     operation(textUtils.getSelectionText(), this._replaceSelection)
@@ -86,7 +105,8 @@ export default class extends React.Component {
     if (window.matchMedia('(min-width: 768px)').matches) {
       this.setState({
         preview: true,
-        subfield:true
+        subfield: true,
+        expand: true
       })
     } else {
       this.setState({
@@ -96,34 +116,16 @@ export default class extends React.Component {
     }
   }
 
-  reLineNum() {
-    const { fontSize } = this.props
-    const editHeight = parseFloat(
-      this.textarea.getBoundingClientRect().height.toFixed(1)
-    )
-    const lineHeight = parseFloat(fontSize.replace('px', '')) * 1.6
-    const baseHeight = parseInt(((editHeight - 16.0) / lineHeight).toFixed())
-    this.setState({
-      lineIndex: baseHeight
-    })
-  }
 
   focusText = () => {
     this.textarea.focus()
+    this.textarea.scrollTop = this.textarea.scrollHeight
+    this.textarea.setSelectionRange(this.textarea.value.length, this.textarea.value.length)
   }
 
   reHeight = () => {
     this.textarea.style.height = ''
     this.textarea.style.height = this.textarea.scrollHeight + 'px'
-    this.reLineNum()
-  }
-
-  handleScoll = (e) => {
-    const radio =
-      this.blockEdit.scrollTop /
-      (this.scrollEdit.scrollHeight - e.currentTarget.offsetHeight)
-    this.blockEdit.scrollTop =
-      (this.scrollEdit.scrollHeight - this.blockEdit.offsetHeight) * radio
   }
 
   saveHistory = (value) => {
@@ -291,7 +293,8 @@ export default class extends React.Component {
     }
     const otherLeftClick = {
       undo: this.undo,
-      redo: this.redo
+      redo: this.redo,
+      esc: this.exitFullScreen
     }
     if (otherLeftClick.hasOwnProperty(type)) {
       otherLeftClick[type]()
@@ -299,56 +302,62 @@ export default class extends React.Component {
 
   }
 
+  exitFullScreen = () => {
+    this.setState({
+      expand: false
+    })
+  }
+
   rightToolbarClick = (type) => {
     const toolbarRightPreviewClick = () => {
-        this.setState({
-            preview: !this.state.preview
-        })
+      this.setState({
+        preview: !this.state.preview
+      })
     }
     const toolbarRightExpandClick = () => {
-        this.setState({
-            expand: !this.state.expand
-        })
+      this.setState({
+        expand: !this.state.expand
+      })
     }
 
     const toolbarRightSubfieldClick = () => {
-        const { preview, subfield } = this.state
+      const { preview, subfield } = this.state
+      if (subfield) {
+        this.reHeight()
+      }
+      if (preview) {
         if (subfield) {
-            this.reHeight()
-        }
-        if (preview) {
-            if (subfield) {
-                this.setState({
-                    subfield: false,
-                    preview: false
-                })
-            } else {
-                this.setState({
-                    subfield: true
-                })
-            }
+          this.setState({
+            subfield: false,
+            preview: false
+          })
         } else {
-            if (subfield) {
-                this.setState({
-                    subfield: false
-                })
-            } else {
-                this.setState({
-                    preview: true,
-                    subfield: true
-                })
-            }
+          this.setState({
+            subfield: true
+          })
         }
+      } else {
+        if (subfield) {
+          this.setState({
+            subfield: false
+          })
+        } else {
+          this.setState({
+            preview: true,
+            subfield: true
+          })
+        }
+      }
     }
     const rightClick = {
-        preview: toolbarRightPreviewClick,
-        expand: toolbarRightExpandClick,
-        subfield: toolbarRightSubfieldClick
-      }
-      if (rightClick.hasOwnProperty(type)) {
-        rightClick[type]()
-      }
-}
+      preview: toolbarRightPreviewClick,
+      expand: toolbarRightExpandClick,
+      subfield: toolbarRightSubfieldClick
+    }
+    if (rightClick.hasOwnProperty(type)) {
+      rightClick[type]()
+    }
+  }
 
   handleChange = e => {
     const value = e.target.value
@@ -356,8 +365,8 @@ export default class extends React.Component {
   }
 
   render() {
-    const { preview, expand, subfield, lineIndex } = this.state
-    const { value, loading, height } = this.props
+    const { preview, expand, subfield } = this.state
+    const { value, loading, height, fontSize } = this.props
 
 
     const fullscreen = classNames({
@@ -377,33 +386,23 @@ export default class extends React.Component {
       'k-active': preview && subfield
     })
 
-    const lineNum = () => {
-      const list = []
-      for (let i = 0; i < lineIndex; i++) {
-        list.push(<li key={i + 1}>{i + 1}</li>)
-      }
-      return <ul className="k-line-num">{list}</ul>
-    }
-
     return (
-      <div className={fullscreen} style={{height}}>
-              <Toolbar
-                expand={expand}
-                subfield={subfield}
-                preview={preview}
-                onClickLeft={this.leftToolBarClick}
-                onClickRight={this.rightToolbarClick}
-                loading={loading}
-            />
-        <div className="k-editor">
+      <div className={fullscreen} style={{ height }}>
+        <Toolbar
+          expand={expand}
+          subfield={subfield}
+          preview={preview}
+          onClickLeft={this.leftToolBarClick}
+          onClickRight={this.rightToolbarClick}
+          loading={loading}
+        />
+        <div className="k-editor" style={{ fontSize }}>
           <div
             className={editorClass}
             id="blockEdit"
             onClick={this.focusText}
-            onScroll={this.handleScoll}
           >
-            <div className="k-editor-block" id="scrollEdit">
-              {lineNum()}
+            <div className="k-editor-block">
               <div className="k-editor-content">
                 <pre id="true-value">{value}</pre>
                 <textarea
@@ -412,7 +411,7 @@ export default class extends React.Component {
                   id="editor-textarea"
                   onChange={e => this.handleChange(e)}
                   onKeyDown={this.onKeyDown}
-                  placeholder={"Write Some"}
+                  placeholder={"Write Something"}
                 />
               </div>
             </div>
@@ -421,11 +420,11 @@ export default class extends React.Component {
             <div
               id="k-preview"
               className="k-preview k-markdown-preview"
-              dangerouslySetInnerHTML={{ __html: marked(value)}}
+              dangerouslySetInnerHTML={{ __html: marked(value) }}
             />
           </div>
         </div>
-        <div className="editor-footer" style={{ overflow: 'hidden', padding: '10px'}}>
+        <div className="editor-footer" style={{ overflow: 'hidden', padding: '10px' }}>
           <Button
             className="btn-primary btn-sm pull-right"
             loading={this.props.loading}

@@ -1,4 +1,5 @@
 const KEY_CODE = {
+    ESC: 27,
     F8: 119,
     F9: 120,
     F10: 121,
@@ -42,6 +43,11 @@ const KEY_CODE = {
           case KEY_CODE.TAB: {
             e.preventDefault()
             func('tab')
+            break
+          }
+          case KEY_CODE.ESC: {
+            e.preventDefault()
+            func('esc')
             break
           }
           default: {
