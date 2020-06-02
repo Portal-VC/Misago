@@ -161,6 +161,7 @@ export default class extends Form {
                   onChange={this.onPostChange}
                   submitLabel={gettext("Post reply")}
                   value={this.state.post}
+                  expand={false}
                 />
               </div>
             </div>

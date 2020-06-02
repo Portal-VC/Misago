@@ -11,7 +11,8 @@ import keydownListen from "./utils/helper/keyboard"
 
 export default class extends React.Component {
   static defaultProps = {
-    fontSize: '18px'
+    fontSize: '18px',
+    expand: true
   }
   constructor(props) {
     super(props)
@@ -19,7 +20,7 @@ export default class extends React.Component {
     this.state = {
       lineIndex: 1,
       preview: false,
-      expand: false,
+      expand: props.expand,
       subfield: false,
       history: [],
       historyIndex: 0,
@@ -101,12 +102,12 @@ export default class extends React.Component {
     this.props.onChange(textUtils.replace(newValue))
   }
 
-  resize() {
+  resize = () => {
     if (window.matchMedia('(min-width: 768px)').matches) {
       this.setState({
         preview: true,
         subfield: true,
-        expand: true
+        expand: this.props.expand
       })
     } else {
       this.setState({
