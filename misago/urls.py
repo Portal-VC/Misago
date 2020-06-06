@@ -4,11 +4,14 @@ from django.views.generic import TemplateView
 from . import hooks
 from .conf import settings
 from .core.views import forum_index
+from django.views.generic import TemplateView
 
 app_name = "misago"
 
 # Register Misago Apps
 urlpatterns = hooks.urlpatterns + [
+    # menu item created in admincp
+    url(r'^guildline', TemplateView.as_view(template_name="misago/guildline.html"), name='guildline'),
     url(r"^", include("misago.analytics.urls")),
     url(r"^", include("misago.legal.urls")),
     url(r"^", include("misago.users.urls")),
