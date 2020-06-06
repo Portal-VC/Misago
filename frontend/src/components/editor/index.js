@@ -35,6 +35,10 @@ export default class extends React.Component {
     this.blockEdit = document.getElementById("blockEdit")
     this.reHeight()
     this.focusText()
+
+    this.textarea.scrollTop = this.textarea.scrollHeight
+    this.textarea.setSelectionRange(this.textarea.value.length, this.textarea.value.length)
+
     $("#editor-textarea").atwho({
       at: "@",
       displayTpl: '<li><img src="${avatar}" alt="">${username}</li>',
@@ -120,8 +124,6 @@ export default class extends React.Component {
 
   focusText = () => {
     this.textarea.focus()
-    this.textarea.scrollTop = this.textarea.scrollHeight
-    this.textarea.setSelectionRange(this.textarea.value.length, this.textarea.value.length)
   }
 
   reHeight = () => {
