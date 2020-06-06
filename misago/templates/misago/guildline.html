@@ -1,0 +1,19 @@
+{% extends "misago/base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+<div class="page page-threads page-threads-{{ list_type|default:'all' }} {% spaceless %}
+  {% block extra-css %}{% endblock extra-css %}
+{% endspaceless %}">
+
+  <div class="page-header-bg">
+    {% block page-header %}
+    {% endblock page-header %}
+  </div>
+
+  <div class="container">
+    <h1>Guildline</h1>
+  </div>
+</div>
+{% endblock content %}
