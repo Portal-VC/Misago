@@ -50,8 +50,8 @@ export default class extends Form {
     this.setState({
       isReady: true,
 
-      post: data.post
-        ? '[quote="@' + data.poster + '"]\n' + data.post + "\n[/quote]"
+      post: data.poster
+        ? '@' + data.poster + '\n'
         : ""
     })
   }
@@ -64,7 +64,7 @@ export default class extends Form {
 
   appendData = data => {
     const newPost = data.post
-      ? '[quote="@' + data.poster + '"]\n' + data.post + "\n[/quote]\n\n"
+      ? '@' + data.poster + '\n'
       : ""
 
     this.setState((prevState, props) => {
