@@ -299,6 +299,7 @@ export default class extends Form {
                 onChange={this.onPostChange}
                 submitLabel={gettext("Post thread")}
                 value={this.state.post}
+                expand={false}
               />
             </div>
           </div>

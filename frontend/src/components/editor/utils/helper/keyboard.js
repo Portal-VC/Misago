@@ -81,12 +81,12 @@ const KEY_CODE = {
             func('italic')
             break
           }
-          case KEY_CODE.U: {
-            // Y
-            e.preventDefault()
-            func('underline')
-            break
-          }
+          // case KEY_CODE.U: {
+          //   // Y
+          //   e.preventDefault()
+          //   func('underline')
+          //   break
+          // }
           default: {
             return
           }

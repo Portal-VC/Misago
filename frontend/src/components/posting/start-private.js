@@ -177,6 +177,7 @@ export default class extends Form {
             <div className="col-xs-12">
               <Editor
                 attachments={this.state.attachments}
+                expand={false}
                 loading={this.state.isLoading}
                 onAttachmentsChange={this.onAttachmentsChange}
                 onCancel={this.onCancel}

@@ -371,6 +371,7 @@ export default class extends React.Component {
     const { preview, expand, subfield } = this.state
     const { value, loading, height, fontSize } = this.props
 
+    const init = "**bold**\n_italic_\n***bold italic***\n~~delete line~~\n[link](url)\n![image by link](url)"
 
     const fullscreen = classNames({
       'k-container': true,
@@ -410,11 +411,11 @@ export default class extends React.Component {
                 <pre id="true-value">{value}</pre>
                 <textarea
                   value={value}
+                  placeholder={init}
                   disabled={loading}
                   id="editor-textarea"
                   onChange={e => this.handleChange(e)}
                   onKeyDown={this.onKeyDown}
-                  placeholder={"Write Something"}
                 />
               </div>
             </div>
@@ -423,7 +424,7 @@ export default class extends React.Component {
             <div
               id="k-preview"
               className="k-preview k-markdown-preview"
-              dangerouslySetInnerHTML={{ __html: marked(value) }}
+              dangerouslySetInnerHTML={{ __html: marked(value===""?init:value) }}
             />
           </div>
         </div>

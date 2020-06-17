@@ -151,6 +151,7 @@ export default class extends Form {
                   onUnprotect={this.onUnprotect}
                   protect={this.state.protect}
                   submitLabel={gettext("Edit reply")}
+                  expand={false}
                   value={this.state.post}
                 />
               </div>
