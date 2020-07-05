@@ -371,7 +371,7 @@ export default class extends React.Component {
     const { preview, expand, subfield } = this.state
     const { value, loading, height, fontSize } = this.props
 
-    const init = "**bold**\n_italic_\n***bold italic***\n~~delete line~~\n[link](url)\n![image by link](url)"
+    const init = "**bold**\n_italic_\n***bold italic***\n~~delete line~~\n[link](url)\n![image by link](https://i.ibb.co/2gXZRnY/portal.jpg)"
 
     const fullscreen = classNames({
       'k-container': true,
