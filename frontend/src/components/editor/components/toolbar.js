@@ -186,9 +186,9 @@ export default class extends React.Component {
                                 <li onClick={() => this.onClickLeft('delline')} title="strike through">
                                     strike through
                                 </li>
-                                <li onClick={() => this.onClickLeft('underline')} title="underline">
+                                {/* <li onClick={() => this.onClickLeft('underline')} title="underline">
                                     underline
-                                </li>
+                                </li> */}
                             </ul>
                         </li>
                         <li
@@ -275,9 +275,9 @@ export default class extends React.Component {
                                 <li onClick={() => this.onClickLeft('delline')} title="strike through">
                                     strike through
                                 </li>
-                                <li onClick={() => this.onClickLeft('underline')} title="underline">
+                                {/* <li onClick={() => this.onClickLeft('underline')} title="underline">
                                     underline
-                                </li>
+                                </li> */}
                             </ul>
                         </li>
                         <li

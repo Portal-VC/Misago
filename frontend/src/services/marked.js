@@ -8,7 +8,7 @@ const mardkedRenderer = (content) => {
         tables: false,
         breaks: true,
         pedantic: false,
-        sanitize: false,
+        sanitize: true,
         smartLists: false,
         smartypants: false
     })

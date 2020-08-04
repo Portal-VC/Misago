@@ -2,7 +2,7 @@ import React from "react"
 import Editor from "misago/components/editor"
 import Form from "misago/components/form"
 import Container from "./utils/container"
-import Message from "./utils/message"
+// import Message from "./utils/message"
 import * as attachments from "./utils/attachments"
 import cleanUsernames from "./utils/usernames"
 import { getPostValidators, getTitleValidators } from "./utils/validators"
@@ -30,6 +30,23 @@ export default class extends Form {
       },
       errors: {}
     }
+  }
+
+  componentDidMount() {
+    $("#usernames").atwho({
+      at: "@",
+      displayTpl: '<li><img src="${avatar}" alt="">${username}</li>',
+      insertTpl: "${username}, ",
+      searchKey: "username",
+      callbacks: {
+        remoteFilter: function (query, callback) {
+          $.getJSON(misago.get("MENTION_API"), { q: query }, callback)
+        }
+      }})
+
+      $("#usernames").on("inserted.atwho", (event, flag, query) => {
+        this.onToChange(event)
+      })
   }
 
   onCancel = () => {
@@ -133,10 +150,11 @@ export default class extends Form {
             <div className="col-xs-12">
               <input
                 className="form-control"
+                id="usernames"
                 disabled={this.state.isLoading}
                 onChange={this.onToChange}
                 placeholder={gettext(
-                  "Comma separated list of user names, eg.: Danny, Lisa"
+                  "Comma separated, use @ to show the dropdown of user eg.: Danny, Lisa"
                 )}
                 type="text"
                 value={this.state.to}
@@ -159,6 +177,7 @@ export default class extends Form {
             <div className="col-xs-12">
               <Editor
                 attachments={this.state.attachments}
+                expand={false}
                 loading={this.state.isLoading}
                 onAttachmentsChange={this.onAttachmentsChange}
                 onCancel={this.onCancel}
